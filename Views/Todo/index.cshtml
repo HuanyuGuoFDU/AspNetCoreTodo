@@ -14,6 +14,9 @@
               <td>&#x2714;</td>
               <td>Item</td>
               <td>Due</td>
+              <td>Start Date</td>
+              <td>Duration</td>
+              <td>Priority</td>
           </tr>
       </thead>
 
@@ -27,7 +30,11 @@
                 </form>
               </td>
               <td>@item.Title</td>
-              <td>@item.DueAt.Humanize()</td>
+              <td>@(item.DueAt?.Humanize() ?? "Not set")</td>
+              <td>@(item.StartDate?.Humanize() ?? "Not set")</td>
+              <td>@item.NumberOfDays @(item.NumberOfDays == 1 ? "day" : "days")</td>
+              <td>@item.Priority</td>
+
           </tr>
       }
   </table>

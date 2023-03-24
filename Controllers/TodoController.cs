@@ -23,6 +23,9 @@ namespace AspNetCoreTodo.Controllers
             // Get to-do items from database
             var items = await _todoItemService.GetIncompleteItemsAsync();
 
+            // sort the todoitem by priority
+            Array.Sort<TodoItem>(items);
+
             // Put items into a model
             var model = new TodoViewModel()
             {
