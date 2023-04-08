@@ -3,5 +3,29 @@
 <form asp-action="AddItem" method="POST">
     <label asp-for="Title">Add a new item:</label>
     <input asp-for="Title">
+    <br>
+
+    <label asp-for="StartDate">Start Date:</label>
+    <input type="date" asp-for="StartDate">
+    <br>
+
+    <label asp-for="DueDate">Due Date:</label>
+    <input type="date" asp-for="DueDate">
+    <br>
+
+    <label asp-for="NumberOfDays">Number of Days:</label>
+    <input type="number" asp-for="NumberOfDays" min="1">
+    <br>
+
+    <label>Priority:</label>
+    <select asp-for="Priority">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <br>
+
     <button type="submit">Add</button>
 </form>

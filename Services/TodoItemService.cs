@@ -29,7 +29,7 @@ namespace AspNetCoreTodo.Services
         {
             newItem.Id = Guid.NewGuid();
             newItem.IsDone = false;
-            newItem.DueDate = DateTimeOffset.Now.AddDays(3);
+
 
             _context.Items.Add(newItem);
 
