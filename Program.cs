@@ -15,8 +15,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddSingleton<ITodoItemService, FakeTodoItemService>();
-//builder.Services.AddScoped<ITodoItemService, TodoItemService>();
+//builder.Services.AddSingleton<ITodoItemService, FakeTodoItemService>();
+builder.Services.AddScoped<ITodoItemService, TodoItemService>();
 
 
 var app = builder.Build();

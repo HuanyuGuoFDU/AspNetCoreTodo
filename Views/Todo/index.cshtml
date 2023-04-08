@@ -30,7 +30,7 @@
                 </form>
               </td>
               <td>@item.Title</td>
-              <td>@(item.DueAt?.Humanize() ?? "Not set")</td>
+              <td>@(item.DueDate?.Humanize() ?? "Not set")</td>
               <td>@(item.StartDate?.Humanize() ?? "Not set")</td>
               <td>@item.NumberOfDays @(item.NumberOfDays == 1 ? "day" : "days")</td>
               <td>@item.Priority</td>
