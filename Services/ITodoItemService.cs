@@ -15,5 +15,7 @@ namespace AspNetCoreTodo.Services
         Task<bool> MarkDoneAsync(Guid id, IdentityUser user);
 
         Task<bool> UpdateItemAsync(TodoItem UpdateItem, IdentityUser user);
+
+        Task<TodoItem> GetItemByIdAsync(Guid id, IdentityUser user);
     }
 }

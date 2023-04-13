@@ -89,7 +89,20 @@
             inputs.forEach(function (input) {
                 input.addEventListener('change', function () {
                     if (input.value !== input.dataset.initialValue) {
-                        input.form.submit();
+                        var startDateInput = input.closest('tr').querySelector('input[name="startDate"]');
+                        var dueDateInput = input.closest('tr').querySelector('input[name="dueDate"]');
+
+                        // Parse the date values
+                        var startDate = new Date(startDateInput.value);
+                        var dueDate = new Date(dueDateInput.value);
+
+                        // Check if startDate is before dueDate
+                        if (startDate < dueDate) {
+                            input.form.submit();
+                        } else {
+                            alert('Start Date must before Due Date.');
+                            input.value = input.dataset.initialValue;
+                        }
                     }
                 });
             });

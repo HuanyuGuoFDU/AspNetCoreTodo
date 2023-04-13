@@ -97,5 +97,10 @@ namespace AspNetCoreTodo.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<TodoItem> GetItemByIdAsync(Guid id, IdentityUser user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

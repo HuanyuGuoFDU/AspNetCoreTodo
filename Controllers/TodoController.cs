@@ -105,12 +105,10 @@ namespace AspNetCoreTodo.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null) return Challenge();
 
-            Console.WriteLine("item id: " + updatedItem.Id);
-
-            Type type = updatedItem.GetType();
-            PropertyInfo[] properties = type.GetProperties();
-            foreach (PropertyInfo property in properties) {
-                Console.WriteLine("{0} = {1}", property.Name, property.GetValue(updatedItem) ?? "null");
+            TodoItem itemNow = await _todoItemService.GetItemByIdAsync(updatedItem.Id, currentUser);
+            if (itemNow == null || itemNow.DueDate < updatedItem.StartDate)
+            {
+                return BadRequest("Due date must be after start date.");
             }
 
             // update database by updatedItem.Id when the of updatedItem is not null
@@ -118,7 +116,6 @@ namespace AspNetCoreTodo.Controllers
             
             if (!successful)
             {
-                Console.WriteLine("item id: " + updatedItem.Id + "Could not add item.");
                 return BadRequest("Could not add item.");
             }
 

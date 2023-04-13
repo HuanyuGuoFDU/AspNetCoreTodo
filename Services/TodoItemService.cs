@@ -71,5 +71,14 @@ namespace AspNetCoreTodo.Services
             return saveResult == 1;
         }
 
+        public async Task<TodoItem> GetItemByIdAsync(Guid id, IdentityUser user)
+        {
+            var item = await _context.Items
+                .Where(x => x.Id == id && x.UserId == user.Id)
+                .SingleOrDefaultAsync();
+
+            return item;
+        }
+
     }
 }
