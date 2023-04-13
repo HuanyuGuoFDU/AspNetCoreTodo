@@ -80,9 +80,16 @@
             var forms = document.querySelectorAll('.item-form');
             var inputs = document.querySelectorAll('.item-form input, .item-form select');
 
+            // Store the initial values
+            inputs.forEach(function (input) {
+                input.dataset.initialValue = input.value;
+            });
+
             inputs.forEach(function (input) {
                 input.addEventListener('change', function () {
-                    input.form.submit();
+                    if (input.value !== input.dataset.initialValue) {
+                        input.form.submit();
+                    }
                 });
             });
         });
