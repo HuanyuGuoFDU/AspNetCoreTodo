@@ -51,5 +51,23 @@ namespace AspNetCoreTodo.Services
             return saveResult == 1; // One entity should have been updated
         }
 
+        public async Task<bool> UpdateItemAsync(TodoItem UpdateItem)
+        {
+            var item = await _context.Items
+                .Where(x => x.Id == UpdateItem.Id)
+                .SingleOrDefaultAsync();
+
+            if (item == null) return false;
+
+            item.Title = UpdateItem.Title == null ? item.Title : UpdateItem.Title;
+            item.DueDate = UpdateItem.DueDate == null ? item.DueDate : UpdateItem.DueDate;
+            item.StartDate = UpdateItem.StartDate == null ? item.StartDate : UpdateItem.StartDate;
+            item.NumberOfDays = UpdateItem.NumberOfDays == 0 ? item.NumberOfDays : UpdateItem.NumberOfDays;
+            item.Priority = UpdateItem.Priority == 0 ? item.Priority : UpdateItem.Priority;
+
+            var saveResult = await _context.SaveChangesAsync();
+            return saveResult == 1;
+        }
+
     }
 }

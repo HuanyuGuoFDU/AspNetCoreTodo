@@ -91,5 +91,10 @@ namespace AspNetCoreTodo.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<bool> UpdateItemAsync(TodoItem UpdateItem)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

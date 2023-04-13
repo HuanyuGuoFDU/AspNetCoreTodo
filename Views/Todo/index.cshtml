@@ -29,11 +29,40 @@
                   <input type="hidden" name="id" value="@item.Id">
                 </form>
               </td>
-              <td>@item.Title</td>
-              <td>@(item.DueDate?.Humanize() ?? "Not set")</td>
-              <td>@(item.StartDate?.Humanize() ?? "Not set")</td>
-              <td>@item.NumberOfDays @(item.NumberOfDays == 1 ? "day" : "days")</td>
-              <td>@item.Priority</td>
+              <td>
+                <form asp-action="UpdateItem" method="POST" class='item-form'>
+                    <input type="text" name="title" value="@item.Title">
+                    <input type="hidden" name="id" value="@item.Id">
+                </form>
+              </td>
+              <td>
+                <form asp-action="UpdateItem" method="POST" class='item-form'>
+                    <input type="date" name="dueDate" value="@item.DueDate?.ToString("yyyy-MM-dd")">
+                    <input type="hidden" name="id" value="@item.Id">
+                </form>                
+               </td>
+              <td>
+                <form asp-action="UpdateItem" method="POST" class='item-form'>
+                    <input type="date" name="startDate" value="@item.StartDate?.ToString("yyyy-MM-dd")">
+                    <input type="hidden" name="id" value="@item.Id">
+                </form>   
+              <td>
+                <form asp-action="UpdateItem" method="POST" class="item-form">
+                  <input type="hidden" name="id" value="@item.Id">
+                  <input type="number" name="numberOfDays" value="@item.NumberOfDays">
+                </form>
+                </td>
+              <td>
+                <form asp-action="UpdateItem" method="POST" class="item-form">
+                  <input type="hidden" name="id" value="@item.Id">
+                  <select name="priority">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                      <option value="@i" selected=@(item.Priority == i)>@i</option>
+                    }
+                  </select>
+                </form>
+              </td>
 
           </tr>
       }
@@ -42,4 +71,20 @@
   <div class="panel-footer add-item-form">
       @await Html.PartialAsync("AddItemPartial", new TodoItem())
   </div>
+    
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var forms = document.querySelectorAll('.item-form');
+            var inputs = document.querySelectorAll('.item-form input, .item-form select');
+
+            inputs.forEach(function (input) {
+                input.addEventListener('change', function () {
+                    input.form.submit();
+                });
+            });
+        });
+    </script>
+}
