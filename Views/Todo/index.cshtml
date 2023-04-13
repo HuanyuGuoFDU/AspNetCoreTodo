@@ -6,72 +6,73 @@
 }
 
 <div class="panel panel-default todo-panel">
-  <div class="panel-heading">@ViewData["Title"]</div>
+    <div class="panel-heading">@ViewData["Title"]</div>
 
-  <table class="table table-hover">
-      <thead>
-          <tr>
-              <td>&#x2714;</td>
-              <td>Item</td>
-              <td>Due</td>
-              <td>Start Date</td>
-              <td>Duration</td>
-              <td>Priority</td>
-          </tr>
-      </thead>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <td>&#x2714;</td>
+                <td>Item</td>
+                <td>Start Date</td>
+                <td>Due</td>
+                <td>Duration</td>
+                <td>Priority</td>
+            </tr>
+        </thead>
 
-      @foreach (var item in Model.Items)
-      {
-          <tr>
-              <td>
-                <form asp-action="MarkDone" method="POST">
-                  <input type="checkbox" class="done-checkbox">
-                  <input type="hidden" name="id" value="@item.Id">
-                </form>
-              </td>
-              <td>
-                <form asp-action="UpdateItem" method="POST" class='item-form'>
-                    <input type="text" name="title" value="@item.Title">
-                    <input type="hidden" name="id" value="@item.Id">
-                </form>
-              </td>
-              <td>
-                <form asp-action="UpdateItem" method="POST" class='item-form'>
-                    <input type="date" name="dueDate" value="@item.DueDate?.ToString("yyyy-MM-dd")">
-                    <input type="hidden" name="id" value="@item.Id">
-                </form>                
-               </td>
-              <td>
-                <form asp-action="UpdateItem" method="POST" class='item-form'>
-                    <input type="date" name="startDate" value="@item.StartDate?.ToString("yyyy-MM-dd")">
-                    <input type="hidden" name="id" value="@item.Id">
-                </form>   
-              <td>
-                <form asp-action="UpdateItem" method="POST" class="item-form">
-                  <input type="hidden" name="id" value="@item.Id">
-                  <input type="number" name="numberOfDays" value="@item.NumberOfDays">
-                </form>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <form asp-action="MarkDone" method="POST">
+                        <input type="checkbox" class="done-checkbox">
+                        <input type="hidden" name="id" value="@item.Id">
+                    </form>
                 </td>
-              <td>
-                <form asp-action="UpdateItem" method="POST" class="item-form">
-                  <input type="hidden" name="id" value="@item.Id">
-                  <select name="priority">
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                      <option value="@i" selected=@(item.Priority == i)>@i</option>
-                    }
-                  </select>
-                </form>
-              </td>
+                <td>
+                    <form asp-action="UpdateItem" method="POST" class='item-form'>
+                        <input type="text" name="title" value="@item.Title">
+                        <input type="hidden" name="id" value="@item.Id">
+                    </form>
+                </td>
+                <td>
+                    <form asp-action="UpdateItem" method="POST" class='item-form'>
+                        <input type="date" name="startDate" value="@item.StartDate?.ToString("yyyy-MM-dd")">
+                        <input type="hidden" name="id" value="@item.Id">
+                    </form>
+                </td>
+                <td>
+                    <form asp-action="UpdateItem" method="POST" class='item-form'>
+                        <input type="date" name="dueDate" value="@item.DueDate?.ToString("yyyy-MM-dd")">
+                        <input type="hidden" name="id" value="@item.Id">
+                    </form>
+                </td>
+                <td>
+                    <form asp-action="UpdateItem" method="POST" class="item-form">
+                        <input type="hidden" name="id" value="@item.Id">
+                        <input type="number" name="numberOfDays" value="@item.NumberOfDays">
+                    </form>
+                </td>
+                <td>
+                    <form asp-action="UpdateItem" method="POST" class="item-form">
+                        <input type="hidden" name="id" value="@item.Id">
+                        <select name="priority">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                <option value="@i" selected=@(item.Priority == i)>@i</option>
+                                }
+                        </select>
+                    </form>
+                </td>
 
-          </tr>
-      }
-  </table>
+            </tr>
+        }
+    </table>
 
-  <div class="panel-footer add-item-form">
-      @await Html.PartialAsync("AddItemPartial", new TodoItem())
-  </div>
-    
+    <div class="panel-footer add-item-form">
+        @await Html.PartialAsync("AddItemPartial", new TodoItem())
+    </div>
+
 </div>
 
 @section Scripts {
