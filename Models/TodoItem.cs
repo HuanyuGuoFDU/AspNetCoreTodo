@@ -30,5 +30,7 @@ namespace AspNetCoreTodo.Models
 
         public int Priority { get; set; }
 
+        public string? UserId { get; set;}
+
     }
 }

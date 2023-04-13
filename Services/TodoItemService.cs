@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AspNetCoreTodo.Data;
 using AspNetCoreTodo.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace AspNetCoreTodo.Services
 {
@@ -17,17 +18,18 @@ namespace AspNetCoreTodo.Services
             _context = context;
         }
 
-        public async Task<TodoItem[]> GetIncompleteItemsAsync()
+        public async Task<TodoItem[]> GetIncompleteItemsAsync(IdentityUser user)
         {
             var items = await _context.Items
-                .Where(x => x.IsDone == false)
+                .Where(x => x.IsDone == false && x.UserId == user.Id)
                 .ToArrayAsync();
             return items;
         }
 
-        public async Task<bool> AddItemAsync(TodoItem newItem)
+        public async Task<bool> AddItemAsync(TodoItem newItem, IdentityUser user)
         {
             newItem.Id = Guid.NewGuid();
+            newItem.UserId = user.Id;
             newItem.IsDone = false;
 
 
@@ -37,10 +39,10 @@ namespace AspNetCoreTodo.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> MarkDoneAsync(Guid id)
+        public async Task<bool> MarkDoneAsync(Guid id, IdentityUser user)
         {
             var item = await _context.Items
-                .Where(x => x.Id == id)
+                .Where(x => x.Id == id && x.UserId == user.Id)
                 .SingleOrDefaultAsync();
 
             if (item == null) return false;
@@ -51,10 +53,10 @@ namespace AspNetCoreTodo.Services
             return saveResult == 1; // One entity should have been updated
         }
 
-        public async Task<bool> UpdateItemAsync(TodoItem UpdateItem)
+        public async Task<bool> UpdateItemAsync(TodoItem UpdateItem, IdentityUser user)
         {
             var item = await _context.Items
-                .Where(x => x.Id == UpdateItem.Id)
+                .Where(x => x.Id == UpdateItem.Id && x.UserId == user.Id)
                 .SingleOrDefaultAsync();
 
             if (item == null) return false;

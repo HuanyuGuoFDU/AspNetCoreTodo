@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,19 +12,26 @@ using AspNetCoreTodo.Models;
 
 namespace AspNetCoreTodo.Controllers
 {
+    [Authorize]
     public class TodoController : Controller
     {
         private readonly ITodoItemService _todoItemService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public TodoController(ITodoItemService todoItemService)
+        public TodoController(ITodoItemService todoItemService, UserManager<IdentityUser> userManager)
         {
             _todoItemService = todoItemService;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return Challenge();
+            
             // Get to-do items from database
-            var items = await _todoItemService.GetIncompleteItemsAsync();
+            var items = await _todoItemService.GetIncompleteItemsAsync(currentUser);
 
             // sort the todoitem by priority
             Array.Sort<TodoItem>(items);
@@ -45,13 +54,16 @@ namespace AspNetCoreTodo.Controllers
                 return RedirectToAction("Index");
             }
 
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return Challenge();
+
             //Add input validation to ensure that StartDate is not after DueDate.
             if (newItem.StartDate > newItem.DueDate)
             {
                 return BadRequest("Due date must be after start date.");
             }
 
-            var successful = await _todoItemService.AddItemAsync(newItem);
+            var successful = await _todoItemService.AddItemAsync(newItem, currentUser);
             if (!successful)
             {
                 return BadRequest("Could not add item.");
@@ -68,7 +80,10 @@ namespace AspNetCoreTodo.Controllers
                 return RedirectToAction("Index");
             }
 
-            var successful = await _todoItemService.MarkDoneAsync(id);
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return Challenge();
+
+            var successful = await _todoItemService.MarkDoneAsync(id, currentUser);
             if (!successful)
             {
                 return BadRequest("Could not mark item as done.");
@@ -87,6 +102,9 @@ namespace AspNetCoreTodo.Controllers
                 return RedirectToAction("Index");
             }
 
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return Challenge();
+
             Console.WriteLine("item id: " + updatedItem.Id);
 
             Type type = updatedItem.GetType();
@@ -95,8 +113,8 @@ namespace AspNetCoreTodo.Controllers
                 Console.WriteLine("{0} = {1}", property.Name, property.GetValue(updatedItem) ?? "null");
             }
 
-            //TODO update database by updatedItem.Id when the filed of updatedItem is not null
-            var successful = await _todoItemService.UpdateItemAsync(updatedItem);
+            // update database by updatedItem.Id when the of updatedItem is not null
+            var successful = await _todoItemService.UpdateItemAsync(updatedItem, currentUser);
             
             if (!successful)
             {
